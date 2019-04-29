@@ -21,7 +21,7 @@ module.exports.delete = (event, context, callback) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error("Couldn't remove the pet item."));
+      callback(new Error("Couldn't remove the item."));
       return;
     }
 
@@ -32,7 +32,7 @@ module.exports.delete = (event, context, callback) => {
         "Access-Control-Allow-Origin": "*", // Required for CORS support to work
         "Access-Control-Allow-Credentials": true // Required for cookies, authorization headers with HTTPS
       },
-      body: JSON.stringify({})
+      body: JSON.stringify(params)
     };
     callback(null, response);
   });

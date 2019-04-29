@@ -1,10 +1,14 @@
-service: servon-rest-dynamoReal
+service: nb-shdsvcnpd-itsm-portal-ld
 
 provider:
   name: aws
   runtime: nodejs8.10
+  stage: prod
+  region: ${opt:region, 'us-east-1'}
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  deploymentBucket:
+    name: nb-shdsvcnpd-itsm-servonld-sandbox
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -18,48 +22,48 @@ provider:
 
 functions:
   create:
-    handler: pets/create.create
+    handler: handler/create.create
     events:
       - http:
-          path: pets
+          path: handler
           method: post
           cors: true
 
   list:
-    handler: pets/list.list
+    handler: handler/list.list
     events:
       - http:
-          path: pets
+          path: handler
           method: get
           cors: true
 
   get:
-    handler: pets/get.get
+    handler: handler/get.get
     events:
       - http:
-          path: pets/{id}
+          path: handler/{id}
           method: get
           cors: true
 
   update:
-    handler: pets/update.update
+    handler: handler/update.update
     events:
       - http:
-          path: pets/{id}
+          path: handler/{id}
           method: put
           cors: true
 
   delete:
-    handler: pets/delete.delete
+    handler: handler/delete.delete
     events:
       - http:
-          path: pets/{id}
+          path: handler/{id}
           method: delete
           cors: true
 
 resources:
   Resources:
-    PetsTable:
+    handlerTable:
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain # Keeps around the DynamoDB resource when we redeploy/destroy
       Properties:

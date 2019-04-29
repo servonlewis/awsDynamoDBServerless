@@ -12,7 +12,7 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 module.exports.create = (event, context, callback) => {
   const timestamp = new Date().toLocaleString();
   const data = JSON.parse(event.body);
-  if (typeof data.other !== "string" || typeof data.humans !== "string") {
+  if (typeof data.note !== "string") {
     console.error("Validation Failed");
     callback(new Error("Couldn't create the pet item."));
     return;
@@ -22,8 +22,7 @@ module.exports.create = (event, context, callback) => {
     TableName: process.env.DYNAMODB_TABLE,
     Item: {
       id: uuid.v1(),
-      other: data.other,
-      humans: data.humans,
+      note: data.note,
       createdAt: timestamp,
       updatedAt: timestamp
     }
@@ -34,7 +33,7 @@ module.exports.create = (event, context, callback) => {
     // handle potential errors
     if (error) {
       console.error(error);
-      callback(new Error("Couldn't create the pet item."));
+      callback(new Error("Couldn't create the item."));
       return;
     }
 
